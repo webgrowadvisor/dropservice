@@ -1,0 +1,7 @@
+Full Name,Email,Phone,Company Name,Job Title,Website,Lead Source,Lead Status,Lead Assign,Street Address,City,State,Country,Zip Code,Contact Method,Last Contact Date,Next Follow-Up Date,Notes,Interested Product,Budget,Closing Date,Deal Stage
+import 1,adilip124@gmail.com,9315209358,JP IN,Devloper,http://localhost/duralux/customers-view.php,Social Media,Renewal,2,Nsp Tower,Delhi,New Delhi,India,1100,Phone,,,"John Doe is a frontend developer with over 5 years of experience creating high-quality, user-friendly websites and web applications. He has a strong understanding of web development technologies and a keen eye for design.",1,25000,,Normal
+import 2,ravi123@gmail.com,9315209358,,,,Website,Renewal,1,,,,,,Email,,,,2,,,Proposal Sent
+import 3,samerarya01@gmail.com,7896541230,,,,Website,Renewal,1,,,,,,Email,,,,1,,,Proposal Sent
+import 4,same23@gmail.com,7896541230,,,,Website,Renewal,1,,,,,,Email,,,,3,,,Proposal Sent
+import 5,mahes54@gmail.com,7854123690,New India,Not Working,http://localhost/,Website,Converted,1,Nsp Tower,Delhi,New Delhi,India,110034,Phone,,,Business Owner,2,2000,,Normal
+import 6,demo785@gmail.com,7854123690,Not Working,,,Referral,New,3,,,,,,Email,,,,3,,,Normal
