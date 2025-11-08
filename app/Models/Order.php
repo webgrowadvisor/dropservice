@@ -13,7 +13,7 @@ class Order extends Model
         'user_id', 'order_number', 'dropshiper_id', 'product_id', 'variant_id',
         'quantity', 'price', 'status', 'payment_method', 'ip_address',
         'mobile', 'address', 'delivery_type',
-        'dropshiper_invoice_no', 'dropshiper_sale_price', 'dropshiper_other',
+        'dropshiper_invoice_no', 'dropshiper_sale_price', 'dropshiper_other', 'delivery_date', 'delivery_time',
     ];
 
     public function user() {

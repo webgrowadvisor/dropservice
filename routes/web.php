@@ -11,6 +11,9 @@ use App\Http\Controllers\Seller\SellerController;
 use App\Http\Controllers\Drop\DropController;
 use App\Http\Controllers\Drop\DropPaymentController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\User\CustomContoller;
+use App\Http\Controllers\User\CartController;
+use App\Http\Controllers\User\CheckoutController;
 
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductReviewController;
@@ -30,12 +33,10 @@ use App\Http\Controllers\Seller\BrandRequestController;
 Route::post('/gst/fetch', [GstController::class, 'getGstDetails']);
 
 // login start 
-Route::get('/user', function () { return view('admin.ad.login'); });
 Route::get('/admin', function () { return view('admin.ad.login'); })->name('admin.login');
 Route::get('/seller', function () {  return view('seller.ad.login'); });
 Route::get('/dropservice', function () {  return view('drop.ad.login'); })->name('drop.ad.login');
 
-Route::post('/user/check', [AuthController::class, 'user_check'])->name('user.check');
 Route::post('/admin/check', [AuthController::class, 'admin_check'])->name('admin.check');
 Route::post('/seller/check', [AuthController::class, 'seller_check'])->name('seller.check');
 Route::post('/dropservice/check', [AuthController::class, 'dropservice_check'])->name('dropservice.check');
@@ -217,15 +218,56 @@ Route::middleware(['auth:dropservice'])->prefix('drop')->group(function () {
     Route::post('/drop/payment/success', [DropController::class, 'handlePaymentSuccess'])->name('drop.payment.success');
 });
 
+// user after login page
+Route::middleware(['web', 'auth:web'])->prefix('user')->group(function () {
+    
+    Route::get('/logout/user', [AuthController::class, 'user_logout'])->name('user.logout');
 
-Route::middleware(['auth:web'])->group(function () {
     Route::post('/products/{product}/reviews', [ProductReviewController::class, 'store'])->name('reviews.store');
+    
+    Route::get('/dashboard-overview', [UserController::class, 'dashboard_overview'])->name('dashboard_overview');
+    Route::get('/dashboard-my-orders', [UserController::class, 'dashboard_my_orders'])->name('dashboard_my_orders');
+    Route::get('/dashboard-my-wallet', [UserController::class, 'dashboard_my_wallet'])->name('dashboard_my_wallet');
+
+    Route::get('/dashboard-my-wishlist', [UserController::class, 'dashboard_my_wishlist'])->name('dashboard_my_wishlist');
+    Route::post('/wishlist/toggle/{productId}', [CustomContoller::class, 'toggle'])->name('wishlist.toggle');
+
+    Route::get('/dashboard-my-addresses', [UserController::class, 'dashboard_my_addresses'])->name('dashboard_my_addresses');
+    Route::post('/address/store', [CustomContoller::class, 'store_address'])->name('address.store');
+    Route::post('/address/update/{id}', [CustomContoller::class, 'update_address'])->name('address.update');
+    Route::get('/address/delete/{id}', [CustomContoller::class, 'delete_address'])->name('address.delete');
+
+    Route::get('/checkout', [UserController::class, 'checkout'])->name('checkout');
+    Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
+    Route::post('/checkout/send-otp', [CheckoutController::class, 'sendOtp']);
+    Route::post('/checkout/verify-otp', [CheckoutController::class, 'verifyOtp']);
+    Route::post('/address/store', [CheckoutController::class, 'store'])->name('user.address.store');
+
+    Route::get('/cart/remove', [CheckoutController::class, 'remove'])->name('remove.cart');
 });
 
 
-Route::get('/', function () { 
-    return 'home'; 
-})->name('home');
+// Route::get('/', function () { return 'home'; })->name('home');
+Route::get('/user/singup', function () { return view('front.sign_up'); })->name('user.singup');
+Route::post('/register/user', [UserController::class, 'register'])->name('user.register');
+Route::get('/password/forget', function () { return view('front.forgot_password'); })->name('user.forget');
+Route::get('/user', function () { return view('front.sign_in'); })->name('user.login');
+Route::post('/user/check', [AuthController::class, 'user_check'])->name('user.check');
+
+Route::get('/', [UserController::class, 'index'])->name('home');
+Route::get('/shop-grid', [UserController::class, 'shop_grid'])->name('shop_grid');
+Route::get('/contact-us', [UserController::class, 'contact_us'])->name('contact_us');
+
+Route::post('/user/cart/add', [CustomContoller::class, 'add_to_cart'])->name('cart.add');
+
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.adds');
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+Route::get('/cart/sidebar', [CartController::class, 'sidebar'])->name('cart.sidebar');
+Route::get('/cart/html', [CartController::class, 'getCartHtml'])->name('cart.html');
+
+Route::get('/aboutus', [UserController::class, 'aboutus'])->name('aboutus');
+Route::get('/single-product-view/{slug}', [UserController::class, 'single_product_view'])->name('single_product_view');
 
 
 Route::get('/optimize', function(){

@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Storage;
         return '₹';
     }
 
+    function helplinenumber(): string
+    {
+        return '1800-0101-7890';
+    }
+
     function userinfo()
     {
         return Auth::guard('web')->user();
@@ -25,6 +30,21 @@ use Illuminate\Support\Facades\Storage;
     function dropinfo()
     {
         return Auth::guard('dropservice')->user();
+    }
+
+    if (!function_exists('getDiscountPercent')) {
+        
+        function getDiscountPercent($mrp, $price)
+        {
+            if ($mrp <= 0 || $price <= 0 || $price >= $mrp) {
+                return '0 ' . '% off';
+            }
+
+            $discount = (($mrp - $price) / $mrp) * 100;
+
+            // Round off to nearest whole number
+            return round($discount) . '% off';
+        }
     }
 
 
@@ -80,6 +100,58 @@ use Illuminate\Support\Facades\Storage;
         $html .= '</picture>';
 
         return $html;
+    }
+
+    if (!function_exists('categoryImage')) {
+        function categoryImage($path = null, $width = 50, $height = 50, $fallback = 'no-image.png')
+        {
+            $imageUrl = $path && Storage::disk('public')->exists($path)
+                ? asset('storage/' . $path)
+                : asset('images/' . $fallback);
+
+            return '<img src="' . $imageUrl . '" width="' . $width . '" height="' . $height . '" style="object-fit:cover; border-radius:8px;">';
+        }
+    }
+
+    if (!function_exists('productImage')) {
+        
+        function productImage($webpPath = null, $originalPath = null, $width = 152, $height = 152, $fallback = 'no-image.png')
+        {
+            $webpUrl = $webpPath && Storage::disk('public')->exists($webpPath)
+                ? asset('storage/' . $webpPath)
+                : null;
+
+            $originalUrl = $originalPath && Storage::disk('public')->exists($originalPath)
+                ? asset('storage/' . $originalPath)
+                : asset('images/' . $fallback);
+
+            // Final image URL (if no webp available)
+            $finalImg = $webpUrl ?? $originalUrl;
+
+            // HTML structure
+            $html = '<div class="product-img-wrap" style="position:relative;">';
+            $html .= '<picture>';
+            if ($webpUrl) {
+                $html .= '<source srcset="' . $webpUrl . '" type="image/webp">';
+            }
+            $html .= '<img src="' . $finalImg . '" alt="Product Image" width="' . $width . '" height="' . $height . '" style="object-fit:cover; border-radius:10px;">';
+            $html .= '</picture>';
+            $html .= '</div>';
+
+            return $html;
+        }
+    }
+
+
+    if (!function_exists('whshlistImage')) {
+        function whshlistImage($path = null, $width = 100, $height = 100, $fallback = 'no-image.png')
+        {
+            $imageUrl = $path && Storage::disk('public')->exists($path)
+                ? asset('storage/' . $path)
+                : asset('images/' . $fallback);
+
+            return '<img src="' . $imageUrl . '" width="' . $width . '" height="' . $height . '" style="object-fit:cover; border-radius:8px;">';
+        }
     }
 
 ?>

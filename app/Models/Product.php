@@ -19,7 +19,7 @@ class Product extends Model
         'mrp_price',
         'thumbnail', // optional, if you plan to add image
         'status',
-        'brand',
+        'brand_id',
         'product_specail',
         'stock',
         'weight',

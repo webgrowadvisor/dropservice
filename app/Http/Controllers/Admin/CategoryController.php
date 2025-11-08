@@ -26,12 +26,21 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
+
         $validated = $request->validate([
             'name'      => 'required|string|max:255',
             'slug'      => 'nullable|string|max:255|unique:categories,slug',
             'parent_id' => 'nullable|exists:categories,id',
             'status'    => 'required|boolean',
+            'thumbnail'   => 'required||image|mimes:jpeg,png,jpg|max:2048',
         ]);
+
+        $thumbnailPath = null;
+        if ($request->hasFile('thumbnail')) {
+            $paths = uploadWebp($request->file('thumbnail'), 'category_thumbnails');
+            $thumbnailPath = $paths['webp'];
+            $validated['thumbnail'] = $thumbnailPath;
+        }
 
         if (empty($validated['slug'])) {
             $validated['slug'] = Str::slug($validated['name']);

@@ -68,7 +68,7 @@
                                                 <option @if(old('status') == '0') {{ 'selected' }} @endif value="0">Inactive</option>                                            
                                             </select>                                             
                                         </div>
-                                        @error('thumbnail') 
+                                        @error('status') 
                                             <span class="text-danger text-xs mt-1">{{ $message }}</span>
                                         @enderror
                                     </div>
@@ -102,6 +102,21 @@
                                             value="{{ old('slug') }}" id="" placeholder="Slug Name">
                                         </div>
                                         @error('slug')
+                                            <span class="text-danger text-xs mt-1">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="row mb-4 align-items-center">
+                                    <div class="col-lg-4">
+                                        <label for="fullnameInput" class="fw-semibold">Thumbnail: <span class="text-danger">*</span></label>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <div class="input-group">
+                                            <div class="input-group-text"><i class="feather-user"></i></div>
+                                            <input type="file" class="form-control" name="thumbnail" accept="image/*" >                                            
+                                        </div>
+                                        @error('thumbnail') 
                                             <span class="text-danger text-xs mt-1">{{ $message }}</span>
                                         @enderror
                                     </div>

@@ -19,20 +19,18 @@ class AuthController extends Controller
     {
         // Validation
         $request->validate([
-            'email' => 'required|email',
+            'mobile' => 'required',
             'password' => 'required'
         ]);
 
-        $credentials = $request->only('email', 'password');
-
-        if (Auth::guard('web')->attempt($credentials)) {
+        if (Auth::guard('web')->attempt(['mobile' => $request->mobile, 'password' => $request->password])) {
             // Login successful
-            return redirect()->route('user.dashboard'); // आप अपनी डैशबोर्ड रूट का नाम यहां दें
+            return redirect()->route('dashboard_overview');
         }
 
         // Login failed
         return back()->withErrors([
-            'email' => 'Invalid credentials.',
+            'password' => 'Invalid credentials.',
         ])->withInput();
     }
 
@@ -48,7 +46,7 @@ class AuthController extends Controller
         
         if (Auth::guard('admin')->attempt($credentials)) {
             // Login successful
-            return redirect()->route('admin.dashboard')->with('success_msg', value: 'Welcome '.Auth::guard('admin')->user()->name); // आप अपनी डैशबोर्ड रूट का नाम यहां दें
+            return redirect()->route('admin.dashboard')->with('success_msg', value: 'Welcome '.Auth::guard('admin')->user()->name); 
         }
         // Login failed
         return back()->withErrors([

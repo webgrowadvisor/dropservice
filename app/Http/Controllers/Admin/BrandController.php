@@ -25,12 +25,20 @@ class BrandController extends Controller
     {
         $request->validate([
             'name' => 'required|unique:brands,name|max:255',
+            'thumbnail'   => 'required||image|mimes:jpeg,png,jpg|max:2048',
         ]);
+
+        $thumbnailPath = null;
+        if ($request->hasFile('thumbnail')) {
+            $paths = uploadWebp($request->file('thumbnail'), 'brand_thumbnails');
+            $thumbnailPath = $paths['webp'];
+        }
 
         Brand::create([
             'status' => $request->status,
             'name' => $request->name,
             'slug' => Str::slug($request->slug) ?? Str::slug($request->name),
+            'thumbnail' => $thumbnailPath,
         ]);
 
         return redirect()->route('brands.index')->with('success_msg', 'Brand created successfully.');

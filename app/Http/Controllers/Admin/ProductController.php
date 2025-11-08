@@ -35,7 +35,7 @@ class ProductController extends Controller
         return view('admin.products.add-product', compact('sellers', 'categories', 'specGroups', 'brands'));
     }
 
-    // Store product
+    // Store product 
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -178,7 +178,7 @@ class ProductController extends Controller
         $brands = Brand::all();
         $categories = Category::whereNull('parent_id')->with('children')->get();
         $specGroups = SpecificationGroup::with('attributes')->get();
-        $product = Product::with(['variants', 'specifications.attribute'])->findOrFail($id);
+        $product = Product::with(['variants', 'specifications.attribute', 'brand'])->findOrFail($id);
         return view('admin.products.product-edit', compact('product', 'sellers', 'categories', 'specGroups', 'brands'));
     }
 
