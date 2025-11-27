@@ -17,7 +17,7 @@
                     @endphp
                     @foreach($categories as $category)
                         <li>
-                            <a href="{{ route('shop_grid') }}" class="single-cat-item">
+                            <a href="{{ route('category_product',$category->slug) }}" class="single-cat-item">
                                 <div class="icon">
                                     {!! categoryImage($category->thumbnail, 50, 50) !!}
                                 </div>
@@ -25,7 +25,7 @@
                             </a>
                         </li>
                     @endforeach
-                        <li>
+                        {{-- <li>
                             <a href="#" class="single-cat-item">
                                 <div class="icon">
                                     <img src="{{ asset('front/images/category/icon-1.svg') }}" alt="">
@@ -96,9 +96,9 @@
                                 </div>
                                 <div class="text"> Pet Care </div>
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
-                    <a href="#" class="morecate-btn"><i class="uil uil-apps"></i>More Categories</a>
+                    <a href="{{ route('shop_grid') }}" class="morecate-btn"><i class="uil uil-apps"></i>More Categories</a>
                 </div>
             </div>
         </div>

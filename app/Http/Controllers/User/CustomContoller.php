@@ -8,6 +8,7 @@ use App\Models\UserAddress;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Wishlist;
 use App\Models\Product;
+use App\Models\Category;
 use session;
 
 class CustomContoller extends Controller
@@ -122,5 +123,42 @@ class CustomContoller extends Controller
         return response()->json(['success' => true, 'success_msg' => $product->name . 'add in to cart']);
     }
 
+    public function suggestions(Request $request)
+    {
+        $term = $request->get('term', '');
+
+        // Find matching products
+        $products = Product::where('status', 1)
+            ->where('name', 'like', '%' . $term . '%')
+            ->select('name', 'slug')
+            ->take(5)
+            ->get()
+            ->map(function ($p) {
+                return [
+                    'type' => 'Product',
+                    'name' => $p->name,
+                    'url' => route('single_product_view', $p->slug),
+                ];
+            });
+
+        // Find matching categories
+        $categories = Category::where('status', 1)
+            ->where('name', 'like', '%' . $term . '%')
+            ->select('name', 'slug')
+            ->take(5)
+            ->get()
+            ->map(function ($c) {
+                return [
+                    'type' => 'Category',
+                    'name' => $c->name,
+                    'url' => route('category_product', $c->slug),
+                ];
+            });
+
+        // Merge and return
+        $results = $products->merge($categories);
+
+        return response()->json($results);
+    }
 
 }

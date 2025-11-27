@@ -44,7 +44,8 @@ class CartController extends Controller
         }
 
         $subtotal = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
-        $delivery = (count($cart) > 0) ? 10 : 0;
+        $delivery = (count($cart) > 0) ? session('selected_shipping_cost') : 100;
+        
         $total = $subtotal + $delivery;
         $saving = collect($cart)->sum(fn($item) => ($item['mrp'] - $item['price']) * $item['quantity']);
 
@@ -60,7 +61,8 @@ class CartController extends Controller
         session()->put('cart', $cart);
 
         $subtotal = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
-        $delivery = (count($cart) > 0) ? 10 : 0;
+        // $delivery = (count($cart) > 0) ? 10 : 0;
+        $delivery = (count($cart) > 0) ? session('selected_shipping_cost') : 100;
         $total = $subtotal + $delivery;
         $saving = collect($cart)->sum(fn($item) => ($item['mrp'] - $item['price']) * $item['quantity']);
 
@@ -80,7 +82,8 @@ class CartController extends Controller
     {
         $cart = session('cart', []);
         $subtotal = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
-        $delivery = (count($cart) > 0) ? 10 : 0;
+        // $delivery = (count($cart) > 0) ? 10 : 0;
+        $delivery = (count($cart) > 0) ? (session()->has('selected_shipping_cost') ? session('selected_shipping_cost') : 0) : 0;
         $total = $subtotal + $delivery;
         $saving = collect($cart)->sum(fn($item) => ($item['mrp'] - $item['price']) * $item['quantity']);
 

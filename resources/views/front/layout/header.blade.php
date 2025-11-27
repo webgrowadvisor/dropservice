@@ -14,30 +14,35 @@
                     <div class="ui inline dropdown loc-title">
                         <div class="text">
                             <i class="uil uil-location-point"></i>
-                            Gurugram
+                            {{ session('selected_city_name', 'Select Location') }}
                         </div>
                         <i class="uil uil-angle-down icon__14"></i>
                         <div class="menu dropdown_loc">
-                            <div class="item channel_item">
-                                <i class="uil uil-location-point"></i>
-                                Gurugram
-                            </div>
-                            <div class="item channel_item">
-                                <i class="uil uil-location-point"></i>
-                                New Delhi
-                            </div>
-                            <div class="item channel_item">
-                                <i class="uil uil-location-point"></i>
-                                Bangaluru
-                            </div>
+                            @php
+                                use App\Models\ServiceLocation;
+                                $citys = ServiceLocation::where('status', 1)->orderBy('id', 'asc')->get();
+                            @endphp
+                            @foreach($citys as $city)
+                                <div class="item channel_item" 
+                                    data-id="{{ $city->id }}" 
+                                    data-name="{{ $city->name }}">
+                                    <i class="uil uil-location-point"></i>
+                                    {{ $city->name }}
+                                </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
                 <div class="search120">
-                    <div class="ui search">
+                    <div class="ui search position-relative">
                         <div class="ui left icon input swdh10">
                             <input class="prompt srch10" type="text" placeholder="Search for products..">
                             <i class='uil uil-search-alt icon icon1'></i>
+                        </div>
+
+                        <div id="searchResults" 
+                            class="bg-white shadow rounded mt-1 position-absolute w-100" 
+                            style="display:none; max-height:250px; overflow:auto; z-index:1000;">
                         </div>
                     </div>
                 </div>

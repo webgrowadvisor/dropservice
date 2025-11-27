@@ -32,17 +32,18 @@
                         <div class="second-row-item">
                             <h4>Categories</h4>
                             <ul>
-                                <li><a href="#">Fruits and Vegetables</a></li>
-                                <li><a href="#">Grocery & Staples</a></li>
-                                <li><a href="#">Dairy & Eggs</a></li>
-                                <li><a href="#">Beverages</a></li>
-                                <li><a href="#">Snacks</a></li>
-                                <li><a href="#">Home Care</a></li>
-                                <li><a href="#">Noodles & Sauces</a></li>
-                                <li><a href="#">Personal Care</a></li>
-                                <li><a href="#">Pet Care</a></li>
-                                <li><a href="#">Meat & Seafood</a></li>
-                                <li><a href="#">Electronics</a></li>
+                                @php
+                                    use App\Models\Category;
+                                    $cats = Category::where('status', 1)->orderBy('id', 'asc')->limit(10)->get();
+                                @endphp
+
+                                @foreach($cats as $cat)
+                                    <li>
+                                        <a href="{{ route('category_product',$cat->slug) }}">
+                                            {{ $cat->name }}
+                                        </a>
+                                    </li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
@@ -50,13 +51,18 @@
                         <div class="second-row-item">
                             <h4>Useful Links</h4>
                             <ul>
-                                <li><a href="#">About US</a></li>
-                                <li><a href="#">Featured Products</a></li>
-                                <li><a href="#">Offers</a></li>
-                                <li><a href="#">Blog</a></li>
-                                <li><a href="#">Faq</a></li>
-                                <li><a href="#">Careers</a></li>
-                                <li><a href="#">Contact Us</a></li>
+                                @php
+                                    use App\Models\Page;
+                                    $pages = Page::where('status', 1)->orderBy('id', 'asc')->limit(10)->get();
+                                @endphp
+
+                                @foreach($pages as $page)
+                                    <li>
+                                        <a href="{{ route('page.show', $page->slug) }}">
+                                            {{ $page->title }}
+                                        </a>
+                                    </li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
@@ -64,14 +70,18 @@
                         <div class="second-row-item">
                             <h4>Top Cities</h4>
                             <ul>
-                                <li><a href="#">Gurugram</a></li>
-                                <li><a href="#">New Delhi</a></li>
-                                <li><a href="#">Bangaluru</a></li>
-                                <li><a href="#">Mumbai</a></li>
-                                <li><a href="#">Hyderabad</a></li>
-                                <li><a href="#">Kolkata</a></li>
-                                <li><a href="#">Ludhiana</a></li>
-                                <li><a href="#">Chandigrah</a></li>
+                                @php
+                                    use App\Models\ServiceLocation;
+                                    $citys = ServiceLocation::where('status', 1)->orderBy('id', 'asc')->limit(10)->get();
+                                @endphp
+
+                                @foreach($citys as $city)
+                                    <li>
+                                        <a href="javascript:void(0);" class="channel_item" data-id="{{ $city->id }}" data-name="{{ $city->name }}">
+                                            {{ $city->name }}
+                                        </a>
+                                    </li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
@@ -134,7 +144,7 @@
                             </ul>
                         </div>
                         <div class="copyright-text">
-                            <i class="uil uil-copyright"></i>Copyright {{date('Y')}} <b>Grocery</b> . All rights reserved
+                            <i class="uil uil-copyright"></i>Copyright {{date('Y')}} <b>{{projectName()}}</b> . All rights reserved
                         </div>
                     </div>
                 </div>

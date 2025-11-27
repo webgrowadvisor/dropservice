@@ -3,7 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
- 
+
 use App\Http\Controllers\GstController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Admin\HomeController;
@@ -144,6 +144,12 @@ Route::middleware(['auth:admin'])->prefix('admin')->group(function () {
     Route::post('/packages/{id}/update', [DropPackageController::class, 'update'])->name('ad.packages.update');
     Route::delete('/packages/{id}', [DropPackageController::class, 'destroy'])->name('ad.packages.destroy');
 
+    Route::get('/service-location', [HomeController::class, 'service_location'])->name('ad.service_location');
+    Route::get('/service-location/add', [HomeController::class, 'service_location_add'])->name('location.add');
+    Route::post('/service-location/store', [HomeController::class, 'service_location_store'])->name('location.store');
+    Route::get('/service-location/edit/{id}', [HomeController::class, 'service_location_edit'])->name('location.edit');
+    Route::post('/service-location/update/{id}', [HomeController::class, 'service_location_update'])->name('location.update');
+
 });
 
 // Seller Routes
@@ -257,7 +263,7 @@ Route::post('/user/check', [AuthController::class, 'user_check'])->name('user.ch
 Route::get('/', [UserController::class, 'index'])->name('home');
 Route::get('/shop-grid', [UserController::class, 'shop_grid'])->name('shop_grid');
 Route::get('/contact-us', [UserController::class, 'contact_us'])->name('contact_us');
-
+Route::post('/contact-submit', [UserController::class, 'submit'])->name('contact.submit');
 Route::post('/user/cart/add', [CustomContoller::class, 'add_to_cart'])->name('cart.add');
 
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.adds');
@@ -267,8 +273,12 @@ Route::get('/cart/sidebar', [CartController::class, 'sidebar'])->name('cart.side
 Route::get('/cart/html', [CartController::class, 'getCartHtml'])->name('cart.html');
 
 Route::get('/aboutus', [UserController::class, 'aboutus'])->name('aboutus');
-Route::get('/single-product-view/{slug}', [UserController::class, 'single_product_view'])->name('single_product_view');
+Route::get('/product/{slug}', [UserController::class, 'single_product_view'])->name('single_product_view');
 
+Route::get('/{slug}', [UserController::class, 'show_page'])->name('page.show');
+Route::post('/set-location', [UserController::class, 'setLocation'])->name('set.location');
+Route::get('/category/{slug}', [UserController::class, 'category_product'])->name('category_product');
+Route::get('/search', [CustomContoller::class, 'suggestions'])->name('search.suggestions');
 
 Route::get('/optimize', function(){
  
@@ -277,4 +287,32 @@ Route::get('/optimize', function(){
     $notification = "Your version has been updated successfully";
     $notification = array('success_msg' => $notification);
     return redirect()->route('home')->with($notification);
+});
+
+Route::get('/composer-update', function () {
+
+    // Run composer command
+    exec('composer update');
+
+    return redirect()->route('home')
+        ->with(['success_msg' => 'Composer update executed successfully!']);
+});
+
+
+Route::get('/storage-link', function () {
+
+    Artisan::call('storage:link');
+
+    return redirect()->back()->with([
+        'success_msg' => 'Storage link created successfully!'
+    ]);
+});
+
+Route::get('/fix-cache', function () {
+    // Artisan::call('config:clear');
+    // Artisan::call('cache:clear');
+    // Artisan::call('route:clear');
+    // Artisan::call('view:clear');
+    // Artisan::call('optimize:clear');
+    return "Cache Cleared!";
 });

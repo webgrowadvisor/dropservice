@@ -371,13 +371,41 @@ $(document).on('click', '.remove-wishlist', function(e) {
 });
 
 
+	$(document).on('click', '.addtocart', function (e) {
+		e.preventDefault();
+
+		let product_id = $(this).data('id');
+		let qty = $(this).closest('.product-group-dt').find('.qty').val();
+
+		$.ajax({
+			url: '/user/cart/add',
+			type: "POST",
+			data: {
+				product_id: product_id,
+				quantity: qty
+			},
+			success: function (response) {
+				if (response.success) {
+					toastr.success(response.success_msg);
+					updateCartSidebar();
+				} else {
+					toastr.error(response.message || 'Something went wrong');
+				}
+			},
+			error: function () {
+				toastr.error('Server error');
+			}
+		});
+	});
+
+
 // add to cart
     $(document).on('click', '.add-to-cart', function (e) {
 		e.preventDefault();
 		
         let product_id = $(this).data('id');
         let qty = $(this).closest('.qty-cart').find('.qty').val();
-
+		
         $.ajax({
             url: '/user/cart/add',
             type: "POST",
@@ -531,3 +559,116 @@ $(document).on('click', '.remove-wishlist', function(e) {
 			}
 		});
 	});
+
+
+	$('#contactForm').on('submit', function(e) {
+        e.preventDefault();
+        let form = $(this);
+        let formData = form.serialize();
+
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: formData,
+            beforeSend: function() {
+                $('#contactResponse').html('<div class="text-info">Sending...</div>');
+            },
+            success: function(response) {
+                if (response.status) {
+					toastr.success(response.message);
+                    form.trigger('reset');
+                } else {
+					toastr.error('Something went wrong!');
+                }
+            },
+            error: function(xhr) {
+                if (xhr.status === 422) {
+                    let errors = xhr.responseJSON.errors;
+                    // let errorHtml = '<ul class="text-danger">';
+                    $.each(errors, function(key, value) {
+						toastr.error(value[0]);
+                        // errorHtml += '<li>' + value[0] + '</li>';
+                    });
+                    // errorHtml += '</ul>';
+                    // $('#contactResponse').html(errorHtml);
+                } else {
+					toastr.error('Server error. Try again later.');
+                }
+            }
+        });
+    });
+
+	$(document).on('click', '.channel_item', function(e) {
+    e.preventDefault();
+    let cityId = $(this).data('id');
+    let cityName = $(this).data('name');
+
+    $.ajax({
+        url: "/set-location",
+        type: "POST",
+        data: {
+            id: cityId,
+        },
+        success: function(response) {
+            if (response.success) {
+                
+                $('.selected-location').html('<i class="uil uil-location-point"></i> ' + response.name);
+				toastr.success(response.name);
+                // if($('#shipping_cost_display').length){
+                //     $('#shipping_cost_display').text('₹' + response.shipping_cost);
+                // }
+
+                localStorage.setItem('selectedCity', response.name);
+                localStorage.setItem('shippingCost', response.shipping_cost);
+            } else {
+                // alert(response.message);
+				toastr.error(response.message);
+            }
+        },
+        error: function() {
+            alert('Something went wrong!');
+        }
+    });
+});
+
+
+
+    $('.srch10').on('keyup', function() {
+        let query = $(this).val();
+
+        if (query.length < 2) {
+            $('#searchResults').hide().empty();
+            return;
+        }
+
+        $.ajax({
+            url: "/search",
+            type: "GET",
+            data: { term: query },
+            success: function(response) {
+                let results = '';
+
+                if (response.length > 0) {
+                    response.forEach(item => {
+                        results += `
+                            <a href="${item.url}" class="d-block px-3 py-2 border-bottom text-dark text-decoration-none">
+                                <strong>${item.name}</strong>
+                                <small class="text-muted float-end">${item.type}</small>
+                            </a>
+                        `;
+                    });
+                } else {
+                    results = `<div class="px-3 py-2 text-muted">No results found</div>`;
+                }
+
+                $('#searchResults').html(results).show();
+            }
+        });
+    });
+
+    // Hide dropdown when clicked outside
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.srch10, #searchResults').length) {
+            $('#searchResults').hide();
+        }
+    });

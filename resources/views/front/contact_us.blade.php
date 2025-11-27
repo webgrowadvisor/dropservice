@@ -31,7 +31,45 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-6">
                         <div class="panel-group accordion" id="accordion0">
-                            <div class="panel panel-default">
+
+                            @foreach($locations as $index => $location)
+                                @php
+                                    $collapseId = 'collapse' . $index;
+                                    $headingId = 'heading' . $index;
+                                @endphp
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" id="{{ $headingId }}">
+                                        <div class="panel-title">
+                                            <a class="collapsed {{ $loop->first ? '' : 'collapsed' }}"
+                                            data-toggle="collapse"
+                                            data-target="#{{ $collapseId }}"
+                                            href="#"
+                                            aria-expanded="{{ $loop->first ? 'true' : 'false' }}"
+                                            aria-controls="{{ $collapseId }}">
+                                                <i class="uil uil-location-point chck_icon"></i>{{ $location->name }}
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div id="{{ $collapseId }}"
+                                        class="panel-collapse collapse {{ $loop->first ? 'show' : '' }}"
+                                        role="tabpanel"
+                                        aria-labelledby="{{ $headingId }}"
+                                        data-parent="#accordion0">
+                                        <div class="panel-body">
+                                            <strong>{{ $location->name }} Branch :</strong><br>
+                                            {!! nl2br(e($location->address)) !!}<br>
+                                            @if($location->phone)
+                                                <div>Tel: <span class="color-pink">{{ $location->phone }}</span></div>
+                                            @endif
+                                            {{-- <div><strong>Shipping Cost:</strong> ₹{{ number_format($location->shipping_cost, 2) }}</div> --}}
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+
+                            {{-- <div class="panel panel-default">
                                 <div class="panel-heading" id="headingOne">
                                     <div class="panel-title">
                                         <a class="collapsed" data-toggle="collapse" data-target="#collapseOne" href="#"
@@ -49,140 +87,7 @@
                                         <div class="color-pink">Tel: 0000-000-000</div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading" id="headingTwo">
-                                    <div class="panel-title">
-                                        <a class="collapsed" data-toggle="collapse" data-target="#collapseTwo" href="#"
-                                            aria-expanded="false" aria-controls="collapseTwo">
-                                            <i class="uil uil-location-point chck_icon"></i>Gurugram
-                                        </a>
-                                    </div>
-                                </div>
-                                <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel"
-                                    aria-labelledby="headingTwo" data-parent="#accordion0">
-                                    <div class="panel-body">
-                                        Gurugram Branch :<br>
-                                        #0000, St No. 0, Lorem ipsum dolor sit amet, Main road, Gurugram, Haryana<br>
-                                        Gurugram- 141001<br>
-                                        <div class="color-pink">Tel: 0000-000-000</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading" id="headingThree">
-                                    <div class="panel-title">
-                                        <a class="collapsed" data-toggle="collapse" data-target="#collapseThree"
-                                            href="#" aria-expanded="false" aria-controls="collapseThree">
-                                            <i class="uil uil-location-point chck_icon"></i>New Delhi
-                                        </a>
-                                    </div>
-                                </div>
-                                <div id="collapseThree" class="panel-collapse collapse" role="tabpanel"
-                                    aria-labelledby="headingThree" data-parent="#accordion0">
-                                    <div class="panel-body">
-                                        New Delhi Branch :<br>
-                                        #0000, St No. 0, Lorem ipsum dolor sit amet, Main road, New Delhi<br>
-                                        New Delhi- 141001<br>
-                                        <div class="color-pink">Tel: 0000-000-000</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading" id="headingfour">
-                                    <div class="panel-title">
-                                        <a class="collapsed" data-toggle="collapse" data-target="#collapsefour" href="#"
-                                            aria-expanded="false" aria-controls="collapsefour">
-                                            <i class="uil uil-location-point chck_icon"></i>Bangaluru
-                                        </a>
-                                    </div>
-                                </div>
-                                <div id="collapsefour" class="panel-collapse collapse" role="tabpanel"
-                                    aria-labelledby="headingfour" data-parent="#accordion0">
-                                    <div class="panel-body">
-                                        Bangaluru Branch :<br>
-                                        #0000, St No. 0, Lorem ipsum dolor sit amet, Main road, Bangaluru<br>
-                                        Bangaluru- 141001<br>
-                                        <div class="color-pink">Tel: 0000-000-000</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading" id="headingfive">
-                                    <div class="panel-title">
-                                        <a class="collapsed" data-toggle="collapse" data-target="#collapsefive" href="#"
-                                            aria-expanded="false" aria-controls="collapsefive">
-                                            <i class="uil uil-location-point chck_icon"></i>Mumbai
-                                        </a>
-                                    </div>
-                                </div>
-                                <div id="collapsefive" class="panel-collapse collapse" role="tabpanel"
-                                    aria-labelledby="headingfive" data-parent="#accordion0">
-                                    <div class="panel-body">
-                                        Mumbai Branch :<br>
-                                        #0000, St No. 0, Lorem ipsum dolor sit amet, Main road, Mumbai<br>
-                                        Mumbai- 141001<br>
-                                        <div class="color-pink">Tel: 0000-000-000</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading" id="headingsix">
-                                    <div class="panel-title">
-                                        <a class="collapsed" data-toggle="collapse" data-target="#collapsesix" href="#"
-                                            aria-expanded="false" aria-controls="collapsesix">
-                                            <i class="uil uil-location-point chck_icon"></i>Hyderabad
-                                        </a>
-                                    </div>
-                                </div>
-                                <div id="collapsesix" class="panel-collapse collapse" role="tabpanel"
-                                    aria-labelledby="headingsix" data-parent="#accordion0">
-                                    <div class="panel-body">
-                                        Hyderabad Branch :<br>
-                                        #0000, St No. 0, Lorem ipsum dolor sit amet, Main road, Hyderabad<br>
-                                        Hyderabad- 141001<br>
-                                        <div class="color-pink">Tel: 0000-000-000</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading" id="headingseven">
-                                    <div class="panel-title">
-                                        <a class="collapsed" data-toggle="collapse" data-target="#collapseseven"
-                                            href="#" aria-expanded="false" aria-controls="collapseseven">
-                                            <i class="uil uil-location-point chck_icon"></i>Kolkata
-                                        </a>
-                                    </div>
-                                </div>
-                                <div id="collapseseven" class="panel-collapse collapse" role="tabpanel"
-                                    aria-labelledby="headingseven" data-parent="#accordion0">
-                                    <div class="panel-body">
-                                        Kolkata Branch :<br>
-                                        #0000, St No. 0, Lorem ipsum dolor sit amet, Main road, Kolkata<br>
-                                        Kolkata- 141001<br>
-                                        <div class="color-pink">Tel: 0000-000-000</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading" id="headingeight">
-                                    <div class="panel-title">
-                                        <a class="collapsed" data-toggle="collapse" data-target="#collapseeight"
-                                            href="#" aria-expanded="false" aria-controls="collapseeight">
-                                            <i class="uil uil-location-point chck_icon"></i>Chandigrah
-                                        </a>
-                                    </div>
-                                </div>
-                                <div id="collapseeight" class="panel-collapse collapse" role="tabpanel"
-                                    aria-labelledby="headingeight" data-parent="#accordion0">
-                                    <div class="panel-body">
-                                        Chandigrah Branch :<br>
-                                        #0000, St No. 0, Lorem ipsum dolor sit amet, Main road, Chandigrah<br>
-                                        Chandigrah- 141001<br>
-                                        <div class="color-pink">Tel: 0000-000-000</div>
-                                    </div>
-                                </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6">
@@ -192,12 +97,13 @@
                                 request and we will get back to you as soon as possible.</p>
                         </div>
                         <div class="contact-form">
-                            <form>
+                            <form id="contactForm" action="{{ route('contact.submit') }}" method="POST">
+                                @csrf
                                 <div class="form-group mt-1">
                                     <label class="control-label">Email Address*</label>
                                     <div class="ui search focus">
                                         <div class="ui left icon input swdh11 swdh19">
-                                            <input class="prompt srch_explore" type="email" name="emailaddress"
+                                            <input class="prompt srch_explore" type="email" name="email"
                                                 placeholder="Your Email Address">
                                         </div>
                                     </div>
@@ -214,7 +120,7 @@
                                 <div class="form-group mt-1">
                                     <div class="field">
                                         <label class="control-label">Message*</label>
-                                        <textarea rows="2" class="form-control" placeholder="Write Message"></textarea>
+                                        <textarea rows="2" name="message" class="form-control" placeholder="Write Message"></textarea>
                                     </div>
                                 </div>
                                 <button class="next-btn16 hover-btn mt-3" type="submit">Submit Request</button>

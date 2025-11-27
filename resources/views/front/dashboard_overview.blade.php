@@ -154,9 +154,9 @@
                                             <h4>My Rewards</h4>
                                         </div>
                                         <div class="ddsh-body">
-                                            <h2>6 Rewards</h2>
+                                            <h2>0 Rewards</h2>
                                             <ul>
-                                                <li>
+                                                {{-- <li>
                                                     <a href="#" class="small-reward-dt hover-btn">Won $2</a>
                                                 </li>
                                                 <li>
@@ -167,10 +167,10 @@
                                                 </li>
                                                 <li>
                                                     <a href="#" class="rewards-link5">+More</a>
-                                                </li>
+                                                </li> --}}
                                             </ul>
                                         </div>
-                                        <a href="#" class="more-link14">Rewards and Details <i
+                                        <a href="{{route('dashboard_my_wallet')}}" class="more-link14">Rewards and Details <i
                                                 class="uil uil-angle-double-right"></i></a>
                                     </div>
                                 </div>
@@ -180,24 +180,24 @@
                                             <h4>My Orders</h4>
                                         </div>
                                         <div class="ddsh-body">
-                                            <h2>2 Recently Purchases</h2>
+                                            <h2>0 Recently Purchases</h2>
                                             <ul class="order-list-145">
                                                 <li>
                                                     <div class="smll-history">
-                                                        <div class="order-title">2 Items <span data-inverted=""
+                                                        <div class="order-title">0 Items <span data-inverted=""
                                                                 data-tooltip="2kg broccoli, 1kg Apple"
                                                                 data-position="top center">?</span></div>
                                                         <div class="order-status">On the way</div>
-                                                        <p><i class="fa-solid fa-indian-rupee-sign"></i> 22</p>
+                                                        <p><i class="fa-solid fa-indian-rupee-sign"></i> 00</p>
                                                     </div>
                                                 </li>
                                             </ul>
                                         </div>
-                                        <a href="#" class="more-link14">All Orders <i
+                                        <a href="{{route('dashboard_my_orders')}}" class="more-link14">All Orders <i
                                                 class="uil uil-angle-double-right"></i></a>
                                     </div>
                                 </div>
-                                <div class="col-lg-12 col-md-12">
+                                {{-- <div class="col-lg-12 col-md-12">
                                     <div class="pdpt-bg">
                                         <div class="pdpt-title">
                                             <h4>My Wallet</h4>
@@ -222,7 +222,7 @@
                                         <a href="#" class="more-link14">Rewards and Details <i
                                                 class="uil uil-angle-double-right"></i></a>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>

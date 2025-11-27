@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Storage;
         return '₹';
     }
 
+    function projectName(): string
+    {
+        return 'G-Mart';
+    }
+
     function helplinenumber(): string
     {
         return '1800-0101-7890';
@@ -151,6 +156,66 @@ use Illuminate\Support\Facades\Storage;
                 : asset('images/' . $fallback);
 
             return '<img src="' . $imageUrl . '" width="' . $width . '" height="' . $height . '" style="object-fit:cover; border-radius:8px;">';
+        }
+    }
+
+
+    if (!function_exists('singleProduct')) {
+        
+        function singleProduct($webpPath = null, $originalPath = null, $width = 250, $height = 300, $fallback = 'no-image.png')
+        {
+            $webpUrl = $webpPath && Storage::disk('public')->exists($webpPath)
+                ? asset('storage/' . $webpPath)
+                : null;
+
+            $originalUrl = $originalPath && Storage::disk('public')->exists($originalPath)
+                ? asset('storage/' . $originalPath)
+                : asset('images/' . $fallback);
+
+            // Final image URL (if no webp available)
+            $finalImg = $webpUrl ?? $originalUrl;
+
+            // HTML structure
+            $html = '<div class="product-img-wrap" style="position:relative;">';
+            $html .= '<picture>';
+            if ($webpUrl) {
+                $html .= '<source srcset="' . $webpUrl . '" type="image/webp">';
+            }
+            $html .= '<img src="' . $finalImg . '" alt="Product Image" width="' . $width . '" height="' . $height . '" style="object-fit:cover; border-radius:10px;">';
+            $html .= '</picture>';
+            $html .= '</div>';
+
+            return $html;
+        }
+    }
+
+
+    if (!function_exists('slideProduct')) {
+        
+        function slideProduct($webpPath = null, $originalPath = null, $width = 100, $height = 70, $fallback = 'no-image.png')
+        {
+            $webpUrl = $webpPath && Storage::disk('public')->exists($webpPath)
+                ? asset('storage/' . $webpPath)
+                : null;
+
+            $originalUrl = $originalPath && Storage::disk('public')->exists($originalPath)
+                ? asset('storage/' . $originalPath)
+                : asset('images/' . $fallback);
+
+            // Final image URL (if no webp available)
+            $finalImg = $webpUrl ?? $originalUrl;
+
+            // HTML structure
+            $html = '<div class="product-img-wrap" style="position:relative;">';
+            $html .= '<picture>';
+            if ($webpUrl) {
+                $html .= '<source srcset="' . $webpUrl . '" type="image/webp">';
+            }
+            $html .= '<img src="' . $finalImg . '" alt="Product Image" width="' . $width . '" height="' . $height . '" style="object-fit:cover; border-radius:10px;">';
+            $html .= '</picture>';
+            $html .= '</div>';
+
+            return $html;
         }
     }
 

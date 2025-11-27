@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\ServiceLocation;
 
 class HomeController extends Controller
 {
@@ -212,6 +213,67 @@ class HomeController extends Controller
         $seller->save();
 
         return redirect()->back()->with('success_msg', 'Account settings updated successfully.');
+    }
+
+    public function service_location()
+    {
+        $location = ServiceLocation::paginate(10);
+        return view('admin.service_location', compact('location'));
+    }
+
+    public function service_location_add()
+    {
+        return view('admin.service_location_add');
+    }
+
+    // Store new location
+    public function service_location_store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'address' => 'required|string',
+            'phone' => 'nullable|string|max:20',
+            'shipping_cost' => 'required|numeric',
+        ]);
+
+        ServiceLocation::create([
+            'name' => $request->name,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'shipping_cost' => $request->shipping_cost,
+            'status' => $request->status ?? 1,
+        ]);
+
+        return redirect()->route('location.add')->with('success_msg', 'Service location added successfully.');
+    }
+
+    // Show edit form
+    public function service_location_edit($id)
+    {
+        $location = ServiceLocation::findOrFail($id);
+        return view('admin.service_location_edit', compact('location'));
+    }
+
+    // Update record
+    public function service_location_update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'address' => 'required|string',
+            'phone' => 'nullable|string|max:20',
+            'shipping_cost' => 'required|numeric',
+        ]);
+
+        $location = ServiceLocation::findOrFail($id);
+        $location->update([
+            'name' => $request->name,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'shipping_cost' => $request->shipping_cost,
+            'status' => $request->status ?? 1,
+        ]);
+
+        return redirect()->route('ad.service_location')->with('success_msg', 'Service location updated successfully.');
     }
 
 }

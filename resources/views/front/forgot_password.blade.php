@@ -40,13 +40,13 @@
                                 </div>
 
                                 <div class="signup-link">
-                                    <p>Go Back - <a href="sign_in.html">Sign In Now</a></p>
+                                    <p>Go Back - <a href="{{route('user.login')}}">Sign In Now</a></p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="copyright-text text-center mt-3">
-                        <i class="uil uil-copyright"></i>Copyright 2022 <b>Grocery</b> . All rights reserved
+                        <i class="uil uil-copyright"></i>Copyright {{date('Y')}} <b>{{projectName()}}</b> . All rights reserved
                     </div>
                 </div>
             </div>

@@ -219,6 +219,16 @@
                                 </div>
                             </div>
                             <div class="row mb-4">
+                                <div class="col-lg-2 fw-medium">Delivery Date</div>
+                                <div class="col-lg-10"><a href="javascript:void(0);"> {{ $order->delivery_date }}</a>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-lg-2 fw-medium">Delivery Time</div>
+                                <div class="col-lg-10"><a href="javascript:void(0);"> {{ $order->delivery_time }}</a>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
                                 <div class="col-lg-2 fw-medium">IP Address</div>
                                 <div class="col-lg-10"><a href="javascript:void(0);"> {{ $order->ip_address }}</a>
                                 </div>
@@ -232,8 +242,8 @@
                                         @method('PUT')
                                         <select name="status" class="form-control w-25 mb-3">
                                             <option value="placed" @selected($order->status == 'placed')>Placed</option>
-                                            <option value="processing" @selected($order->status == 'processing')>Processing</option>
-                                            <option value="shipped" @selected($order->status == 'shipped')>Shipped</option>
+                                            <option value="packed" @selected($order->status == 'packed')>Packed</option>
+                                            <option value="on_the_way" @selected($order->status == 'on_the_way')>On the way</option>
                                             <option value="delivered" @selected($order->status == 'delivered')>Delivered</option>
                                             <option value="cancelled" @selected($order->status == 'cancelled')>Cancelled</option>
                                         </select>

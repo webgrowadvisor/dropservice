@@ -6,15 +6,19 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Admin;
 use App\Models\Seller;
 use App\Models\Dropservice;
 use App\Models\User;
+use App\Models\Page;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\UserAddress;
 use App\Models\Wishlist;
 use App\Models\Order;
+use App\Models\ServiceLocation;
+use App\Models\ProductEnquiry;
 use session;
 
 class UserController extends Controller
@@ -126,7 +130,8 @@ class UserController extends Controller
     
     public function contact_us()
     {
-        return view('front.contact_us');
+        $locations = ServiceLocation::where('status', 1)->get();
+        return view('front.contact_us', compact('locations'));
     }
 
     public function aboutus()
@@ -167,5 +172,101 @@ class UserController extends Controller
         return view('front.checkout', compact('cart', 'subtotal', 'delivery', 'total', 'saving', 'addresses'));
     }
     
+
+    public function show_page($slug)
+    {
+        $page = Page::where('slug', $slug)->where('status', 1)->first();
+
+        if (!$page) {
+            abort(404);
+        }
+
+        return view('front.content_page', compact('page'));
+    }
+
+    public function submit(Request $request)
+    {
+        // Validate
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string|max:1000',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $product = Product::where('status', 1)->first();
+
+        ProductEnquiry::create([
+            'product_id' => $product->id ?? null,
+            'name'       => $request->subject,
+            'email'      => $request->email,
+            'message'    => $request->message,
+        ]);
+
+        // You can save or send mail here
+        // Example: Mail::to('admin@example.com')->send(new ContactMail($request->all()));
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Your message has been sent successfully!'
+        ]);
+    }
+
+    public function setLocation(Request $request)
+    {
+        $location = ServiceLocation::find($request->id);
+
+        if (!$location) {
+            return response()->json(['success' => false, 'message' => 'Location not found']);
+        }
+
+        // Store in session
+        session([
+            'selected_city_id' => $location->id,
+            'selected_city_name' => $location->name,
+            'selected_shipping_cost' => $location->shipping_cost,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'name' => $location->name,
+            'shipping_cost' => $location->shipping_cost,
+        ]);
+    }
+
+    public function category_product(Request $request, $slug)
+    {
+        $category = Category::where('slug', $slug)->where('status', 1)->firstOrFail();
+
+        $query = Product::where('status', 1)
+        ->where('category_id', $category->id)
+        ->with(['variants', 'category']);
+
+        // --- Apply sorting based on filter dropdown ---
+        if ($request->sort == 'price_low') {
+            $query->orderBy('base_price', 'asc');
+        } elseif ($request->sort == 'price_high') {
+            $query->orderBy('base_price', 'desc');
+        } elseif ($request->sort == 'alpha') {
+            $query->orderBy('name', 'asc');
+        } elseif ($request->sort == 'off_high') {
+            // Sorting by % off — use raw expression
+            $query->orderByRaw('((mrp_price - base_price) / mrp_price) DESC');
+        } elseif ($request->sort == 'off_low') {
+            $query->orderByRaw('((mrp_price - base_price) / mrp_price) ASC');
+        } else {
+            $query->latest();
+        }
+
+        $products = $query->paginate(12);
+
+        return view('front.category_product', compact('products', 'category'));
+    }
 
 }

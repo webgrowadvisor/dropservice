@@ -194,6 +194,16 @@
                     </li>
 
                     <li class="nxl-item nxl-caption">
+                        <label>Service Location</label>
+                    </li>
+                    <li class="nxl-item nxl-hasmenu">
+                        <a href="{{ route('ad.service_location') }}" class="nxl-link">
+                            <span class="nxl-micon"><i class="feather-chevron-right"></i></span>
+                            <span class="nxl-mtext">Service Location</span><span class="nxl-arrow"></span>
+                        </a>                      
+                    </li>
+
+                    <li class="nxl-item nxl-caption">
                         <label>Logout</label>
                     </li>
                     <li class="nxl-item nxl-hasmenu">
